@@ -2,6 +2,7 @@
 // and IndexedDB layer easy to inspect and test.
 import { CATEGORY_ICONS, icon } from "./icons.js";
 import { highlightSegments } from "./search.js";
+import { imageForTerm } from "./term-images.js";
 
 export const CATEGORIES = Object.keys(CATEGORY_ICONS);
 
@@ -56,6 +57,9 @@ function card(term, query, onOpen, onFavorite) {
   node.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(term); }
   });
+  const image = el("img", "term-card-image");
+  image.src = imageForTerm(term); image.alt = term.image ? `${term.term} image` : `${term.category} sample illustration`;
+  node.append(image);
   const top = el("div", "term-card-top");
   const glyph = el("span", "term-card-icon");
   fillIcon(glyph, CATEGORY_ICONS[term.category] || "info", 20);
@@ -137,6 +141,7 @@ export function showDetail(term, allTerms, actions) {
   dialog.dataset.termId = term.id;
   document.querySelector("#detail-category-label").textContent = term.category;
   document.querySelector("#detail-term-name").textContent = term.term;
+  const detailImage = document.querySelector("#detail-image"); detailImage.src = imageForTerm(term); detailImage.alt = term.image ? `${term.term} image` : `${term.category} sample illustration`;
   const glyph = document.querySelector("#detail-category-icon"); fillIcon(glyph, CATEGORY_ICONS[term.category] || "info", 26);
   const pronunciation = document.querySelector("#detail-pronunciation"); pronunciation.hidden = !term.pronunciation; pronunciation.textContent = term.pronunciation ? `Pronounced: ${term.pronunciation}` : "";
   document.querySelector("#detail-short-def").textContent = term.shortDefinition || "No short definition added.";

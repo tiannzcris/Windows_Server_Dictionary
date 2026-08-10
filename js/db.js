@@ -130,6 +130,7 @@ export async function addCustomTerm(input) {
     extendedDefinition: (input.extendedDefinition || "").trim() || null,
     relatedTerms: splitRelatedTerms(input.relatedTerms),
     example: (input.example || "").trim() || null,
+    image: input.image || null,
     antonym: null,
     source: "custom",
     favorite: false,
@@ -172,6 +173,7 @@ export async function updateCustomTerm(id, updates) {
     extendedDefinition: (updates.extendedDefinition || "").trim() || null,
     relatedTerms: splitRelatedTerms(updates.relatedTerms),
     example: (updates.example || "").trim() || null,
+    image: updates.image || existing.image || null,
   };
 
   await promisifyRequest(getStore(db, "readwrite").put(record));
@@ -234,6 +236,7 @@ export async function importCustomTerms(records) {
       extendedDefinition: raw.extendedDefinition || null,
       relatedTerms: splitRelatedTerms(raw.relatedTerms),
       example: raw.example || null,
+      image: raw.image || null,
       antonym: null,
       source: "custom",
       favorite: Boolean(raw.favorite),

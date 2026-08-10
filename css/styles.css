@@ -664,6 +664,15 @@ a {
   transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+.term-card-image {
+  width: 100%;
+  height: 128px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
 .term-card:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-panel);
@@ -957,6 +966,15 @@ dialog[open] {
   font-weight: 500;
 }
 
+.detail-image {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
 .detail-extended-def {
   font-size: 14.5px;
   color: var(--text-muted);
@@ -1038,6 +1056,8 @@ dialog[open] {
 .required {
   color: var(--danger);
 }
+
+.form-optional { color: var(--text-muted); font-weight: 400; }
 
 .form-field input,
 .form-field select,

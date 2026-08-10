@@ -152,6 +152,8 @@
         ><span data-icon="star"></span></button>
       </div>
 
+      <img id="detail-image" class="detail-image" alt="" />
+
       <p class="detail-short-def" id="detail-short-def"></p>
       <p class="detail-extended-def" id="detail-extended-def"></p>
 
@@ -200,6 +202,11 @@
         <select id="field-category" name="category" required>
           <option value="" disabled selected>Choose a category…</option>
         </select>
+      </div>
+
+      <div class="form-field">
+        <label for="field-image">Image <span class="form-optional">(optional, max 2 MB)</span></label>
+        <input id="field-image" name="image" type="file" accept="image/*" />
       </div>
 
       <div class="form-field">
