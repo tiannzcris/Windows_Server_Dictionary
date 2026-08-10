@@ -1306,3 +1306,39 @@ dialog[open] {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
+/* Phone-first refinements: compact controls and touch-sized actions. */
+@media (max-width: 600px) {
+  :root { --status-strip-height: 52px; }
+  body { padding-bottom: var(--status-strip-height); }
+  .topbar { gap: var(--space-2); padding: var(--space-2); }
+  .brand-mark { font-size: 22px; }
+  .topbar-actions { gap: 2px; }
+  .topbar-actions .icon-btn, .view-toggle .icon-btn, .rail-toggle { width: 36px; height: 36px; }
+  .topbar-actions #backup-btn { display: none; }
+  #add-term-btn { min-width: 36px; width: 36px; height: 36px; padding: 0; justify-content: center; }
+  .command-search-field { height: 46px; }
+  .command-search-hint { display: none; }
+  .rail { width: min(330px, 90vw); padding-top: max(var(--space-5), env(safe-area-inset-top)); padding-bottom: max(var(--space-5), env(safe-area-inset-bottom)); }
+  .rail-chip { min-height: 44px; }
+  .main { padding: var(--space-4) var(--space-3) calc(var(--space-6) + var(--status-strip-height)); }
+  .term-card-image { height: 148px; }
+  .detail-content, .term-form, .backup-dialog { padding: var(--space-6) var(--space-4) max(var(--space-5), env(safe-area-inset-bottom)); }
+  .detail-header { flex-wrap: wrap; padding-right: var(--space-5); }
+  .detail-header-text { flex-basis: calc(100% - 44px); }
+  .detail-image { max-height: 190px; }
+  .detail-image-actions, .detail-custom-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .detail-image-actions .btn, .detail-custom-actions .btn { justify-content: center; min-height: 44px; }
+  dialog { overflow-y: auto; overscroll-behavior: contain; }
+  .form-actions { position: sticky; bottom: calc(-1 * var(--space-5)); background: var(--surface); padding: var(--space-3) 0 max(var(--space-3), env(safe-area-inset-bottom)); border-top: 1px solid var(--border); }
+  .status-strip { height: var(--status-strip-height); white-space: normal; line-height: 1.25; padding: var(--space-2) var(--space-3) max(var(--space-2), env(safe-area-inset-bottom)); }
+  .status-sep { display: none; }
+  .status-item { font-size: 10px; }
+  #status-category { margin-left: auto; max-width: 115px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+@media (max-width: 390px) {
+  .brand { display: none; }
+  .topbar-actions #favorites-toggle-btn { display: none; }
+  .detail-image-actions, .detail-custom-actions { grid-template-columns: 1fr; }
+  .status-custom-count { display: none; }
+}
