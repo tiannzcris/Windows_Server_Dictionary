@@ -1,5 +1,5 @@
 // Versioned app-shell cache. Change CACHE_VERSION whenever a shipped file changes.
-const CACHE_VERSION = "ws-terms-v3";
+const CACHE_VERSION = "ws-terms-v4";
 const APP_SHELL = ["./", "index.html", "css/styles.css", "js/app.js", "js/db.js", "js/search.js", "js/ui.js", "js/terms-editor.js", "js/icons.js", "js/term-images.js", "js/sw-register.js", "data/terms.json", "manifest.json", "icons/icon-192.png", "icons/icon-512.png", "fonts/space-grotesk-var.woff2", "fonts/ibm-plex-sans-var.woff2", "fonts/ibm-plex-mono-400.woff2", "fonts/ibm-plex-mono-500.woff2"];
 // Install atomically: first visit downloads the entire offline shell.
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())));
