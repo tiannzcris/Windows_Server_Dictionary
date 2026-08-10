@@ -975,6 +975,13 @@ dialog[open] {
   background: var(--bg);
 }
 
+.detail-image-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: calc(-1 * var(--space-2));
+}
+
 .detail-extended-def {
   font-size: 14.5px;
   color: var(--text-muted);

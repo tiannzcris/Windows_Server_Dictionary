@@ -156,6 +156,9 @@ export function showDetail(term, allTerms, actions) {
   const custom = document.querySelector("#detail-custom-actions"); custom.hidden = term.source !== "custom";
   document.querySelector("#detail-edit-btn").onclick = () => actions.edit(term);
   document.querySelector("#detail-delete-btn").onclick = () => actions.remove(term);
+  document.querySelector("#detail-change-image-btn").onclick = () => actions.image(term);
+  document.querySelector("#detail-reset-image-btn").hidden = !term.image;
+  document.querySelector("#detail-reset-image-btn").onclick = () => actions.resetImage(term);
   if (!dialog.open) dialog.showModal();
 }
 

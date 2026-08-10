@@ -11,7 +11,7 @@ function counts() { const result = { all: state.terms.length }; state.terms.forE
 function filtered() { return filterTerms(state.index, state); }
 function render() { const terms = filtered(); ui.renderCategories(ui.CATEGORIES, counts(), state.category, chooseCategory); ui.renderResults(terms, state, { open: openTerm, favorite: favorite }); ui.updateStatus(state.terms, state.category); document.querySelector("#search-clear").hidden = !state.query; document.querySelector("#favorites-toggle-btn").setAttribute("aria-pressed", String(state.favoritesOnly)); }
 function chooseCategory(category) { state.category = category; render(); closeDrawer(); }
-function openTerm(term) { ui.closeSuggestions(); state.activeSuggestion = -1; ui.showDetail(term, state.terms, { open: openTerm, favorite, edit: editor.openEdit, remove: editor.askToDelete }); }
+function openTerm(term) { ui.closeSuggestions(); state.activeSuggestion = -1; ui.showDetail(term, state.terms, { open: openTerm, favorite, edit: editor.openEdit, remove: editor.askToDelete, image: editor.openImagePicker, resetImage: editor.resetImage }); }
 async function favorite(term, keepOpen) { await toggleFavorite(term.id); await refresh(term.favorite ? "Removed from favorites." : "Added to favorites."); if (keepOpen) openTerm(state.terms.find((item) => item.id === term.id)); }
 function updateSuggestions() { state.suggestions = getSuggestions(state.index, state.query); state.activeSuggestion = -1; ui.renderSuggestions(state.suggestions, state.query, state.activeSuggestion, selectSuggestion); }
 function selectSuggestion(term) { document.querySelector("#search-input").value = term.term; state.query = term.term; ui.closeSuggestions(); render(); openTerm(term); }

@@ -1,5 +1,5 @@
 // terms-editor.js — custom-term form, delete confirmation, and optional backup.
-import { addCustomTerm, updateCustomTerm, deleteCustomTerm, exportCustomTerms, importCustomTerms } from "./db.js";
+import { addCustomTerm, updateCustomTerm, deleteCustomTerm, setTermImage, exportCustomTerms, importCustomTerms } from "./db.js";
 import { CATEGORIES } from "./ui.js";
 
 let afterChange = () => {};
@@ -17,6 +17,8 @@ export function setupEditor(onChange) {
   dialog("#confirm-dialog-confirm").onclick = confirmDelete;
   dialog("#backup-export-btn").onclick = downloadBackup;
   dialog("#backup-import-input").addEventListener("change", importBackup);
+  dialog("#term-image-form").addEventListener("submit", saveImage);
+  dialog("#reset-term-image-btn").onclick = resetImageFromForm;
 }
 
 export function openAdd() { editingId = null; const form = dialog("#term-form"); form.reset(); form.dataset.currentImage = ""; dialog("#term-form-heading").textContent = "Add a Term"; dialog("#term-form-submit").textContent = "Save Term"; dialog("#term-form-error").hidden = true; dialog("#term-form-dialog").showModal(); dialog("#field-term").focus(); }
@@ -26,6 +28,39 @@ async function save(event) { event.preventDefault(); const form = event.currentT
 
 export function askToDelete(term) { dialog("#confirm-dialog").dataset.termId = term.id; dialog("#confirm-dialog-message").textContent = `Delete “${term.term}”? This can't be undone.`; dialog("#confirm-dialog").showModal(); }
 async function confirmDelete() { const id = dialog("#confirm-dialog").dataset.termId; try { await deleteCustomTerm(id); closeOpenDialogs(); await afterChange("Term deleted."); } catch (err) { dialog("#confirm-dialog").close(); } }
+
+/** Image-only editor: official definitions remain read-only. */
+export function openImagePicker(term) {
+  const form = dialog("#term-image-form");
+  // Close the detail panel before opening a modal editor to keep focus order
+  // predictable for keyboard and screen-reader users.
+  dialog("#detail-dialog").close();
+  form.reset(); form.dataset.termId = term.id;
+  dialog("#term-image-heading").textContent = `Change image: ${term.term}`;
+  dialog("#term-image-note").textContent = term.source === "official" ? "This changes only this browser's visual image. Official definitions and categories stay locked." : "This image is saved only in this browser with your custom term.";
+  dialog("#term-image-error").hidden = true;
+  dialog("#reset-term-image-btn").hidden = !term.image;
+  dialog("#term-image-dialog").showModal();
+}
+
+async function imageFileAsDataUrl(file) {
+  if (!file || !file.type.startsWith("image/") || file.size > 2 * 1024 * 1024) throw new Error("Choose an image file smaller than 2 MB.");
+  return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+}
+
+async function saveImage(event) {
+  event.preventDefault(); const form = event.currentTarget; const error = dialog("#term-image-error");
+  try { await setTermImage(form.dataset.termId, await imageFileAsDataUrl(form.elements.image.files[0])); dialog("#term-image-dialog").close(); await afterChange("Term image updated."); }
+  catch (err) { error.textContent = err.message || "Could not save this image."; error.hidden = false; }
+}
+
+export async function resetImage(term) {
+  await setTermImage(term.id, null); document.querySelector("#detail-dialog").close(); await afterChange("Term image reset to the included sample.");
+}
+
+async function resetImageFromForm() {
+  const form = dialog("#term-image-form"); await setTermImage(form.dataset.termId, null); dialog("#term-image-dialog").close(); await afterChange("Term image reset to the included sample.");
+}
 
 export async function openBackup(customCount) { dialog("#backup-export-count").textContent = `You have ${customCount} custom term${customCount === 1 ? "" : "s"}.`; dialog("#backup-import-error").hidden = true; dialog("#backup-import-success").hidden = true; dialog("#backup-dialog").showModal(); }
 async function downloadBackup() { const data = await exportCustomTerms(); const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })); const a = document.createElement("a"); a.href = url; a.download = "ws-terms-custom-backup.json"; a.click(); URL.revokeObjectURL(url); }

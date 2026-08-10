@@ -189,6 +189,14 @@ export async function deleteCustomTerm(id) {
   await promisifyRequest(getStore(db, "readwrite").delete(id));
 }
 
+/** Store only a browser-local presentation image; official term data remains locked. */
+export async function setTermImage(id, image) {
+  const db = await openDatabase();
+  const existing = await promisifyRequest(getStore(db, "readonly").get(id));
+  if (!existing) throw new Error("Term not found.");
+  await promisifyRequest(getStore(db, "readwrite").put({ ...existing, image: image || null }));
+}
+
 /** Flip a term's favorite flag (works for both official and custom terms). */
 export async function toggleFavorite(id) {
   const db = await openDatabase();

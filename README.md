@@ -18,7 +18,7 @@ On first visit, `service-worker.js` precaches the app shell, self-hosted fonts, 
 
 ## Using it
 
-Search is instant and typo tolerant; use category filters, Favorites, or A–Z mode to browse. Every official term shows an included offline blueprint sample visual by category. Select a card for details and related-term links. **Add Term** creates a device-local custom entry and can include an image up to 2 MB; that image is saved in IndexedDB only in the current browser. Only custom entries can be edited or deleted. Backup & Restore exports or imports those custom entries as JSON. The status strip reports connection state, the fixed `100/100` official cache count, custom count, and category. Custom data is not synced or remotely backed up unless you export it.
+Search is instant and typo tolerant; use category filters, Favorites, or A–Z mode to browse. Every official term shows an included offline blueprint sample visual by category. Open any term to change its browser-local image (up to 2 MB) or reset it to the included sample; official definitions and categories remain locked. **Add Term** creates a device-local custom entry and can include an image. Only custom entries can be edited or deleted. Backup & Restore exports or imports those custom entries as JSON. The status strip reports connection state, the fixed `100/100` official cache count, custom count, and category. Custom data is not synced or remotely backed up unless you export it.
 
 ## Structure and limits
 
