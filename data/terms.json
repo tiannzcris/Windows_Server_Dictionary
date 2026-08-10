@@ -1,0 +1,1572 @@
+[
+  {
+    "id": "active-directory",
+    "term": "Active Directory (AD)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "A-D",
+    "shortDefinition": "A directory service from Microsoft that stores information about users, computers, and other resources on a network and controls their authentication and authorization.",
+    "extendedDefinition": "Active Directory organizes network objects, such as users, groups, computers, and printers, into a hierarchical structure of domains, trees, and forests. It uses LDAP for directory queries and Kerberos for authentication, and administrators manage it centrally rather than configuring each machine individually. Most enterprise Windows networks rely on AD as the backbone for identity and access management.",
+    "relatedTerms": [
+      "Domain Controller (DC)",
+      "Organizational Unit (OU)",
+      "Group Policy Object (GPO)",
+      "Kerberos Authentication"
+    ],
+    "example": "Get-ADUser -Filter * | Select-Object Name, Enabled",
+    "antonym": "Workgroup",
+    "source": "official"
+  },
+  {
+    "id": "domain-controller",
+    "term": "Domain Controller (DC)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "D-C",
+    "shortDefinition": "A server that hosts a writable or read-only copy of Active Directory and handles authentication requests within a domain.",
+    "extendedDefinition": "Domain Controllers authenticate users and computers, enforce security policies, and replicate directory data to other DCs in the domain. Multiple DCs provide redundancy so authentication continues even if one server becomes unavailable. They also commonly host DNS for the domain and issue Kerberos tickets during logon.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "SYSVOL",
+      "FSMO Roles",
+      "Global Catalog (GC)"
+    ],
+    "example": "Install-ADDSDomainController -DomainName contoso.local",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "organizational-unit",
+    "term": "Organizational Unit (OU)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "O-U",
+    "shortDefinition": "A container within an Active Directory domain used to group users, computers, and other objects for easier administration.",
+    "extendedDefinition": "OUs let administrators organize objects logically, such as by department, location, or role, and apply Group Policy Objects or delegate administrative permissions to a specific subset of the domain. Unlike security groups, OUs are primarily an organizational and policy-application structure rather than a permissions mechanism in their own right.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Group Policy Object (GPO)",
+      "Domain Controller (DC)"
+    ],
+    "example": "New-ADOrganizationalUnit -Name 'Sales' -Path 'DC=contoso,DC=local'",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "group-policy-object",
+    "term": "Group Policy Object (GPO)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "G-P-O",
+    "shortDefinition": "A collection of settings that can be applied to users or computers within Active Directory to enforce configuration and security policy.",
+    "extendedDefinition": "GPOs are linked to sites, domains, or organizational units and are used to control everything from password policies to desktop restrictions and software deployment. Client computers process them at startup, at logon, and on a periodic refresh interval. The Group Policy Management Console is the primary tool for creating and linking them.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Organizational Unit (OU)",
+      "Group Policy Management Console (GPMC)"
+    ],
+    "example": "New-GPO -Name 'Password Policy' | New-GPLink -Target 'DC=contoso,DC=local'",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "forest",
+    "term": "Forest",
+    "category": "Active Directory & Identity",
+    "pronunciation": null,
+    "shortDefinition": "The top-level logical container in Active Directory, consisting of one or more domains that share a common schema and configuration.",
+    "extendedDefinition": "A forest defines the security boundary for Active Directory; domains within the same forest trust each other automatically. Every domain in a forest shares a single schema, global catalog, and configuration partition, even though each domain can have its own administrators and policies.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Domain Controller (DC)",
+      "Global Catalog (GC)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "global-catalog",
+    "term": "Global Catalog (GC)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "G-C",
+    "shortDefinition": "A distributed data repository that contains a partial, searchable copy of every object in every domain in an Active Directory forest.",
+    "extendedDefinition": "The Global Catalog lets users and applications find objects anywhere in the forest without needing to know which domain holds them, by storing a subset of each object's attributes. Domain controllers designated as Global Catalog servers also play a role in resolving universal group membership during logon.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Domain Controller (DC)",
+      "Forest"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "fsmo-roles",
+    "term": "FSMO Roles",
+    "category": "Active Directory & Identity",
+    "pronunciation": "FIZZ-moh",
+    "shortDefinition": "Five specialized Active Directory roles, each held by a specific domain controller, that perform operations unsafe to handle on a multi-master basis.",
+    "extendedDefinition": "Flexible Single Master Operation roles include the Schema Master and Domain Naming Master, one each per forest, and the PDC Emulator, RID Master, and Infrastructure Master, one each per domain. Because most AD changes are multi-master, these roles exist for the small set of operations that require a single authoritative source to avoid conflicts.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Domain Controller (DC)",
+      "Forest"
+    ],
+    "example": "Get-ADDomainController -Filter * | Select-Object Name, OperationMasterRoles",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "ldap",
+    "term": "LDAP (Lightweight Directory Access Protocol)",
+    "category": "Active Directory & Identity",
+    "pronunciation": "EL-dap",
+    "shortDefinition": "An open, industry-standard protocol used to query and modify directory services such as Active Directory.",
+    "extendedDefinition": "LDAP defines how clients communicate with directory servers to search for and retrieve objects like users, groups, and computers. Active Directory implements LDAP alongside Kerberos, allowing both Microsoft and third-party applications to interact with the directory through a common protocol.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Domain Controller (DC)",
+      "Kerberos Authentication"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "kerberos-authentication",
+    "term": "Kerberos Authentication",
+    "category": "Active Directory & Identity",
+    "pronunciation": "KER-ber-os",
+    "shortDefinition": "The default network authentication protocol in Active Directory environments, using time-limited tickets rather than transmitted passwords.",
+    "extendedDefinition": "Kerberos relies on a trusted third party, the Key Distribution Center hosted on domain controllers, to issue tickets that prove a user's identity to other services without repeatedly sending credentials over the network. It replaced the older, weaker NTLM protocol as the preferred authentication method in Windows domains.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Domain Controller (DC)",
+      "LDAP (Lightweight Directory Access Protocol)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "sysvol",
+    "term": "SYSVOL",
+    "category": "Active Directory & Identity",
+    "pronunciation": "SIS-vol",
+    "shortDefinition": "A shared folder on every domain controller that stores Group Policy templates, scripts, and other domain-wide files replicated across the domain.",
+    "extendedDefinition": "SYSVOL ensures every domain controller has an identical copy of policy-related content so Group Policy applies consistently regardless of which DC a client contacts. In modern Active Directory environments it is typically kept in sync using DFS Replication.",
+    "relatedTerms": [
+      "Domain Controller (DC)",
+      "Group Policy Object (GPO)",
+      "DFS Replication (DFSR)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "dns",
+    "term": "DNS (Domain Name System)",
+    "category": "Networking Services",
+    "pronunciation": "D-N-S",
+    "shortDefinition": "A hierarchical naming service that translates human-readable domain names into IP addresses.",
+    "extendedDefinition": "Windows Server's DNS role resolves names for both internet resources and internal Active Directory services, since AD clients locate domain controllers through DNS records. It supports zones, forward and reverse lookups, and dynamic updates from domain-joined clients.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "DHCP (Dynamic Host Configuration Protocol)",
+      "Domain Controller (DC)"
+    ],
+    "example": "Add-DnsServerResourceRecordA -ZoneName contoso.local -Name www -IPv4Address 10.0.0.10",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "dhcp",
+    "term": "DHCP (Dynamic Host Configuration Protocol)",
+    "category": "Networking Services",
+    "pronunciation": "D-H-C-P",
+    "shortDefinition": "A protocol and server role that automatically assigns IP addresses and network configuration to client devices.",
+    "extendedDefinition": "DHCP servers hand out addresses from defined scopes along with settings like default gateway, DNS servers, and lease duration, removing the need to configure networking manually on every device. Windows Server supports DHCP failover so two servers can share responsibility for a scope.",
+    "relatedTerms": [
+      "DNS (Domain Name System)",
+      "IPAM (IP Address Management)",
+      "NIC Teaming"
+    ],
+    "example": "Add-DhcpServerv4Scope -Name 'Office' -StartRange 10.0.0.50 -EndRange 10.0.0.200 -SubnetMask 255.255.255.0",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "wins",
+    "term": "WINS (Windows Internet Name Service)",
+    "category": "Networking Services",
+    "pronunciation": "WINZ",
+    "shortDefinition": "A legacy name resolution service that maps NetBIOS computer names to IP addresses.",
+    "extendedDefinition": "WINS predates modern DNS-based name resolution and was widely used on older Windows networks to resolve NetBIOS names across subnets. It has been largely superseded by DNS but is still occasionally found supporting legacy applications.",
+    "relatedTerms": [
+      "DNS (Domain Name System)",
+      "DHCP (Dynamic Host Configuration Protocol)"
+    ],
+    "example": null,
+    "antonym": "DNS (Domain Name System)",
+    "source": "official"
+  },
+  {
+    "id": "rras",
+    "term": "RRAS (Routing and Remote Access Service)",
+    "category": "Networking Services",
+    "pronunciation": "AR-ras",
+    "shortDefinition": "A Windows Server role that provides routing, NAT, and remote-access VPN or dial-up connectivity.",
+    "extendedDefinition": "RRAS turns a server into a software router capable of forwarding traffic between networks, as well as terminating VPN connections from remote clients. It supports multiple VPN protocols and can also provide site-to-site connectivity between offices.",
+    "relatedTerms": [
+      "Site-to-Site VPN",
+      "DirectAccess",
+      "Network Policy Server (NPS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "network-policy-server",
+    "term": "Network Policy Server (NPS)",
+    "category": "Networking Services",
+    "pronunciation": "N-P-S",
+    "shortDefinition": "A Windows Server role implementing RADIUS to centralize authentication, authorization, and accounting for network access.",
+    "extendedDefinition": "NPS is commonly used to authenticate VPN connections, wireless network access, and 802.1X-secured switch ports against Active Directory credentials. It evaluates connection requests against configurable network policies before granting or denying access.",
+    "relatedTerms": [
+      "RRAS (Routing and Remote Access Service)",
+      "Active Directory (AD)",
+      "DirectAccess"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "ipam",
+    "term": "IPAM (IP Address Management)",
+    "category": "Networking Services",
+    "pronunciation": "EYE-pam",
+    "shortDefinition": "A Windows Server feature for discovering, monitoring, and managing the IP address space used across an organization's DHCP and DNS infrastructure.",
+    "extendedDefinition": "IPAM provides a central console for tracking IP address utilization, detecting overlapping or unused ranges, and auditing changes to DHCP and DNS configuration. It is particularly useful in larger environments where address space is managed across many servers.",
+    "relatedTerms": [
+      "DHCP (Dynamic Host Configuration Protocol)",
+      "DNS (Domain Name System)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "network-load-balancing",
+    "term": "Network Load Balancing (NLB)",
+    "category": "Networking Services",
+    "pronunciation": "N-L-B",
+    "shortDefinition": "A Windows Server clustering feature that distributes incoming network traffic across multiple servers to improve availability and performance.",
+    "extendedDefinition": "NLB works at the network layer, spreading client requests, commonly for web applications, across a group of identically configured nodes. Unlike Failover Clustering, it does not coordinate shared storage or application state; each node typically operates independently.",
+    "relatedTerms": [
+      "Failover Clustering",
+      "Internet Information Services (IIS)",
+      "Web Farm"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "directaccess",
+    "term": "DirectAccess",
+    "category": "Networking Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server feature that gives remote client computers seamless, always-on connectivity to the internal corporate network without a traditional VPN client.",
+    "extendedDefinition": "DirectAccess automatically establishes a secure connection to internal resources whenever a domain-joined client has internet access, requiring no user action to connect. It has largely been superseded by newer VPN and Zero Trust remote-access approaches in more recent Windows Server releases.",
+    "relatedTerms": [
+      "RRAS (Routing and Remote Access Service)",
+      "Site-to-Site VPN",
+      "Remote Desktop Gateway"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "site-to-site-vpn",
+    "term": "Site-to-Site VPN",
+    "category": "Networking Services",
+    "pronunciation": null,
+    "shortDefinition": "A persistent, encrypted network connection linking two separate physical locations over the internet as though they were on the same network.",
+    "extendedDefinition": "Site-to-site VPNs are typically established between routers or VPN gateways, such as an RRAS server, at each location and require no per-user client software. They are commonly used to connect branch offices to a main datacenter or to link on-premises networks with cloud environments.",
+    "relatedTerms": [
+      "RRAS (Routing and Remote Access Service)",
+      "DirectAccess"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "nic-teaming",
+    "term": "NIC Teaming",
+    "category": "Networking Services",
+    "pronunciation": "nick",
+    "shortDefinition": "A Windows Server feature that combines multiple physical network adapters into a single logical interface for fault tolerance and increased throughput.",
+    "extendedDefinition": "NIC Teaming lets a server continue operating on the network if one adapter or its cable fails, and can aggregate bandwidth across the teamed adapters depending on the configuration mode. It is commonly used on Hyper-V hosts to provide resilient connectivity for virtual switches.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Virtual Switch",
+      "Failover Clustering"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "ntfs",
+    "term": "NTFS",
+    "category": "Storage & File Systems",
+    "pronunciation": "N-T-F-S",
+    "shortDefinition": "The default file system for Windows Server volumes, supporting permissions, encryption, compression, and large file sizes.",
+    "extendedDefinition": "NTFS provides per-file and per-folder access control lists, journaling for reliability after crashes, and features like file compression and encryption. It has been the standard Windows file system for decades and underlies most on-premises file storage.",
+    "relatedTerms": [
+      "ReFS (Resilient File System)",
+      "Storage Spaces",
+      "Data Deduplication"
+    ],
+    "example": null,
+    "antonym": "ReFS (Resilient File System)",
+    "source": "official"
+  },
+  {
+    "id": "refs",
+    "term": "ReFS (Resilient File System)",
+    "category": "Storage & File Systems",
+    "pronunciation": "R-E-F-S",
+    "shortDefinition": "A newer Microsoft file system designed for high resilience to data corruption, particularly on large-scale and virtualized storage.",
+    "extendedDefinition": "ReFS uses checksums and integrity streams to detect and, on mirrored storage, automatically correct corruption without taking a volume offline. It is commonly paired with Storage Spaces Direct and is optimized for large volumes and Hyper-V workloads rather than replacing NTFS in every scenario.",
+    "relatedTerms": [
+      "NTFS",
+      "Storage Spaces Direct (S2D)",
+      "Volume Shadow Copy Service (VSS)"
+    ],
+    "example": null,
+    "antonym": "NTFS",
+    "source": "official"
+  },
+  {
+    "id": "storage-spaces",
+    "term": "Storage Spaces",
+    "category": "Storage & File Systems",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server storage virtualization feature that pools multiple physical disks and presents them as flexible virtual disks.",
+    "extendedDefinition": "Storage Spaces groups drives into a storage pool and then carves out virtual disks from that pool with configurable resiliency, such as mirroring or parity, similar in concept to software RAID. It removes dependency on hardware RAID controllers for many deployments.",
+    "relatedTerms": [
+      "RAID (Redundant Array of Independent Disks)",
+      "Storage Spaces Direct (S2D)",
+      "NTFS"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "storage-spaces-direct",
+    "term": "Storage Spaces Direct (S2D)",
+    "category": "Storage & File Systems",
+    "pronunciation": "S-2-D",
+    "shortDefinition": "A Windows Server feature that pools local, direct-attached storage across multiple clustered servers into a single software-defined, highly available storage system.",
+    "extendedDefinition": "S2D combines the local disks in each node of a failover cluster into a shared storage pool over the network, eliminating the need for a separate SAN. It is commonly used as the storage layer beneath Hyper-V clusters, offering resiliency and scale-out performance.",
+    "relatedTerms": [
+      "Storage Spaces",
+      "Failover Clustering",
+      "Cluster Shared Volumes (CSV)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "raid",
+    "term": "RAID (Redundant Array of Independent Disks)",
+    "category": "Storage & File Systems",
+    "pronunciation": "rhymes with made",
+    "shortDefinition": "A technology that combines multiple physical disks into a logical unit to improve performance, redundancy, or both.",
+    "extendedDefinition": "Different RAID levels balance capacity, performance, and fault tolerance differently; for example, mirroring duplicates data across disks while striping with parity spreads data and recovery information across a set of disks. Windows Server can implement RAID-like resiliency through Storage Spaces or rely on dedicated hardware RAID controllers.",
+    "relatedTerms": [
+      "Storage Spaces",
+      "NTFS"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "distributed-file-system",
+    "term": "Distributed File System (DFS)",
+    "category": "Storage & File Systems",
+    "pronunciation": "D-F-S",
+    "shortDefinition": "A Windows Server role that lets administrators group shared folders from different servers into a single, unified namespace.",
+    "extendedDefinition": "DFS Namespaces present users with one logical folder structure regardless of which physical server actually hosts each shared folder, simplifying access and enabling transparent failover. It is often paired with DFS Replication to keep the underlying folder contents synchronized.",
+    "relatedTerms": [
+      "DFS Replication (DFSR)",
+      "File Server role",
+      "Work Folders"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "dfs-replication",
+    "term": "DFS Replication (DFSR)",
+    "category": "Storage & File Systems",
+    "pronunciation": "D-F-S-R",
+    "shortDefinition": "A Windows Server service that synchronizes folder contents between multiple servers, keeping replicated copies up to date.",
+    "extendedDefinition": "DFSR uses a compression algorithm to minimize the amount of data sent over the network, replicating only the changed portions of files. It is used both to keep DFS Namespace targets consistent and to replicate SYSVOL between domain controllers.",
+    "relatedTerms": [
+      "Distributed File System (DFS)",
+      "SYSVOL"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "volume-shadow-copy-service",
+    "term": "Volume Shadow Copy Service (VSS)",
+    "category": "Storage & File Systems",
+    "pronunciation": "V-S-S",
+    "shortDefinition": "A Windows service that creates point-in-time snapshots of volumes, allowing consistent backups and file recovery even while files are in use.",
+    "extendedDefinition": "VSS coordinates between applications, backup software, and storage to produce a consistent snapshot without requiring downtime. It underpins features like Shadow Copies for shared folders and is used by many backup products to capture data in a stable state.",
+    "relatedTerms": [
+      "Shadow Copies (Previous Versions)",
+      "Windows Server Backup",
+      "NTFS"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "iscsi",
+    "term": "iSCSI",
+    "category": "Storage & File Systems",
+    "pronunciation": "eye-SKUZ-ee",
+    "shortDefinition": "A protocol that carries SCSI storage commands over standard IP networks, allowing servers to access remote block storage as though it were a local disk.",
+    "extendedDefinition": "iSCSI lets a server, acting as an initiator, connect to a storage target, often a SAN or a Windows Server configured as an iSCSI Target, over an ordinary Ethernet network rather than requiring dedicated Fibre Channel hardware. It is a common, cost-effective way to provide shared storage for clustering.",
+    "relatedTerms": [
+      "Storage Spaces",
+      "Failover Clustering",
+      "Cluster Shared Volumes (CSV)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "data-deduplication",
+    "term": "Data Deduplication",
+    "category": "Storage & File Systems",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server feature that identifies and eliminates redundant data on a volume to reduce storage consumption.",
+    "extendedDefinition": "Data Deduplication scans files for repeated chunks of data and replaces duplicates with references to a single stored copy, which can significantly shrink the space used by file shares, backups, and VM libraries with similar content. It runs as a background, post-process optimization rather than altering files in real time.",
+    "relatedTerms": [
+      "NTFS",
+      "ReFS (Resilient File System)",
+      "File Server role"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "hyper-v",
+    "term": "Hyper-V",
+    "category": "Virtualization & Containers",
+    "pronunciation": "HY-per-vee",
+    "shortDefinition": "Microsoft's native hypervisor role for Windows Server, used to create and run virtual machines.",
+    "extendedDefinition": "Hyper-V provides a type-1 hypervisor that partitions physical hardware so multiple isolated virtual machines can run on a single host. It includes features like Live Migration, checkpoints, and virtual switches, and forms the foundation of Microsoft's on-premises virtualization stack.",
+    "relatedTerms": [
+      "Virtual Machine (VM)",
+      "Live Migration",
+      "Virtual Switch",
+      "Server Core"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "virtual-machine",
+    "term": "Virtual Machine (VM)",
+    "category": "Virtualization & Containers",
+    "pronunciation": "V-M",
+    "shortDefinition": "A software-based emulation of a physical computer, running its own operating system and applications on top of a hypervisor.",
+    "extendedDefinition": "Virtual machines share the underlying physical host's hardware while remaining isolated from one another, each with its own virtual CPU, memory, disks, and network adapters. They allow multiple independent workloads to run on a single physical server, improving hardware utilization and flexibility.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Checkpoint (VM Snapshot)",
+      "Live Migration"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "live-migration",
+    "term": "Live Migration",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A Hyper-V feature that moves a running virtual machine from one host to another with no perceptible downtime.",
+    "extendedDefinition": "Live Migration copies a VM's memory state to the destination host while it continues running on the source, then performs a near-instantaneous cutover once the states are synchronized. It is commonly used for load balancing and to evacuate VMs from a host before planned maintenance.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Failover Clustering",
+      "Cluster Shared Volumes (CSV)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "hyper-v-replica",
+    "term": "Hyper-V Replica",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A Hyper-V feature that asynchronously replicates a virtual machine's disk changes to a secondary host for disaster recovery.",
+    "extendedDefinition": "Hyper-V Replica periodically sends changed VM data to a replica server, often at a different physical site, so the VM can be started there if the primary host or site fails. Unlike Live Migration, it is designed for disaster recovery rather than planned, zero-downtime moves.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Virtual Machine (VM)",
+      "Storage Replica"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "virtual-switch",
+    "term": "Virtual Switch",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A software-based network switch within Hyper-V that connects virtual machines to each other and, optionally, to the physical network.",
+    "extendedDefinition": "Virtual switches can be configured as external, bridged to a physical NIC, internal for host-to-VM traffic only, or private for VM-to-VM traffic only, giving administrators control over how VM traffic flows. They are a core building block for isolating or segmenting virtualized network traffic.",
+    "relatedTerms": [
+      "Hyper-V",
+      "NIC Teaming",
+      "Virtual Machine (VM)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "checkpoint",
+    "term": "Checkpoint (VM Snapshot)",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A saved state of a virtual machine at a specific point in time, allowing it to be reverted later.",
+    "extendedDefinition": "Checkpoints capture a VM's disk, memory, and configuration state so an administrator can roll back changes, which is useful before applying an update or making a risky change. They are not a substitute for regular backups, since long-lived checkpoints can consume significant storage and degrade performance.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Virtual Machine (VM)",
+      "Volume Shadow Copy Service (VSS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "nested-virtualization",
+    "term": "Nested Virtualization",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "The ability to run a hypervisor inside a virtual machine that is itself running on a hypervisor.",
+    "extendedDefinition": "Nested virtualization lets a Hyper-V VM host its own virtual machines, which is useful for testing, training, and development scenarios that require a virtualization host without dedicating separate physical hardware. It requires processor support and explicit enablement on the parent VM.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Virtual Machine (VM)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "windows-containers",
+    "term": "Windows Containers",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "An operating-system-level virtualization technology that packages applications with their dependencies into lightweight, isolated units sharing the host kernel.",
+    "extendedDefinition": "Windows Containers run as isolated processes on a shared Windows kernel, making them far lighter weight than full virtual machines while still isolating the application's filesystem, registry, and network view. Windows Server supports both process-isolated containers and Hyper-V isolated containers for stronger separation.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Nano Server",
+      "Server Core"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "nano-server",
+    "term": "Nano Server",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A minimal, headless deployment option for Windows Server designed as a lightweight base for containers and cloud-native workloads.",
+    "extendedDefinition": "Nano Server strips out the graphical interface and many traditional server components to produce a much smaller footprint, faster startup, and reduced attack surface. It is managed remotely rather than through a local console, and is intended primarily as a container base image.",
+    "relatedTerms": [
+      "Server Core",
+      "Windows Containers",
+      "Hyper-V"
+    ],
+    "example": null,
+    "antonym": "Server Core",
+    "source": "official"
+  },
+  {
+    "id": "server-core",
+    "term": "Server Core",
+    "category": "Virtualization & Containers",
+    "pronunciation": null,
+    "shortDefinition": "A minimal installation option for Windows Server that omits the traditional desktop graphical shell, leaving a command-line and PowerShell-driven environment.",
+    "extendedDefinition": "Server Core reduces disk footprint, patching surface, and resource usage compared to a full Desktop Experience installation, while still supporting most server roles. Administrators typically manage it remotely via PowerShell, Windows Admin Center, or Server Manager rather than logging on locally.",
+    "relatedTerms": [
+      "Nano Server",
+      "PowerShell",
+      "Server Manager"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "microsoft-defender-antivirus",
+    "term": "Microsoft Defender Antivirus",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "The built-in real-time antimalware protection included with Windows Server.",
+    "extendedDefinition": "Defender Antivirus scans files and processes for known malware signatures and suspicious behavior, and integrates with cloud-delivered protection for faster detection of new threats. On servers, it can be managed centrally alongside other endpoints in an organization's security tooling.",
+    "relatedTerms": [
+      "Windows Firewall with Advanced Security",
+      "Security Baseline",
+      "Credential Guard"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "bitlocker",
+    "term": "BitLocker Drive Encryption",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "A Windows feature that encrypts an entire volume to protect data if a drive or physical machine is lost or stolen.",
+    "extendedDefinition": "BitLocker encrypts data at rest and, when paired with a Trusted Platform Module, can verify system integrity before unlocking the drive at boot. On servers it is often used to protect data volumes and backup media rather than just client laptops.",
+    "relatedTerms": [
+      "NTFS",
+      "Security Baseline",
+      "Public Key Infrastructure (PKI)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "windows-firewall",
+    "term": "Windows Firewall with Advanced Security",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "The built-in, stateful host firewall in Windows Server that filters inbound and outbound network traffic based on configurable rules.",
+    "extendedDefinition": "It supports separate profiles for domain, private, and public networks, and rules can be scoped by port, protocol, program, or IPsec requirements. Administrators commonly manage it at scale through Group Policy rather than configuring each server individually.",
+    "relatedTerms": [
+      "Security Baseline",
+      "Local Security Policy",
+      "Group Policy Object (GPO)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "just-enough-administration",
+    "term": "Just Enough Administration (JEA)",
+    "category": "Security & Compliance",
+    "pronunciation": "J-E-A",
+    "shortDefinition": "A PowerShell-based security technology that restricts administrative access to only the specific commands a user needs to perform their job.",
+    "extendedDefinition": "JEA lets administrators define constrained PowerShell endpoints so, for example, a helpdesk user can restart a specific service without receiving full administrative rights on the server. It reduces the attack surface and blast radius of compromised or misused accounts.",
+    "relatedTerms": [
+      "PowerShell",
+      "Local Security Policy",
+      "Credential Guard"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "credential-guard",
+    "term": "Credential Guard",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "A Windows security feature that uses virtualization-based isolation to protect cached credentials from theft.",
+    "extendedDefinition": "Credential Guard isolates the process that stores hashed credentials in a protected, virtualized environment, making it much harder for malware running with administrative rights to extract them for pass-the-hash or similar attacks. It requires hardware virtualization support to function.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Just Enough Administration (JEA)",
+      "Kerberos Authentication"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "public-key-infrastructure",
+    "term": "Public Key Infrastructure (PKI)",
+    "category": "Security & Compliance",
+    "pronunciation": "P-K-I",
+    "shortDefinition": "The framework of policies, roles, and services used to create, distribute, and manage digital certificates and public-key encryption.",
+    "extendedDefinition": "PKI enables secure authentication, encryption, and digital signing by binding public keys to verified identities through certificates issued by a trusted certificate authority. In Windows Server environments, Active Directory Certificate Services is commonly used to build an internal PKI.",
+    "relatedTerms": [
+      "Active Directory Certificate Services (AD CS)",
+      "BitLocker Drive Encryption"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "ad-cs",
+    "term": "Active Directory Certificate Services (AD CS)",
+    "category": "Security & Compliance",
+    "pronunciation": "A-D-C-S",
+    "shortDefinition": "A Windows Server role that lets an organization operate its own certificate authority to issue and manage digital certificates.",
+    "extendedDefinition": "AD CS can issue certificates for purposes such as encrypting email, authenticating devices, and securing internal web services, integrating tightly with Active Directory for identity verification and certificate auto-enrollment. It forms the basis of an internal PKI for organizations that don't want to rely solely on public certificate authorities.",
+    "relatedTerms": [
+      "Public Key Infrastructure (PKI)",
+      "Active Directory (AD)"
+    ],
+    "example": "Install-WindowsFeature ADCS-Cert-Authority -IncludeManagementTools",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "local-security-policy",
+    "term": "Local Security Policy",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "A management console for configuring security settings, such as password rules, account lockout, and user rights, on an individual Windows Server.",
+    "extendedDefinition": "Local Security Policy settings apply to the specific machine and can be overridden by Group Policy on a domain-joined server, since GPOs generally take precedence. It is most relevant for standalone or workgroup servers not managed through Active Directory.",
+    "relatedTerms": [
+      "Group Policy Object (GPO)",
+      "Windows Firewall with Advanced Security",
+      "Security Baseline"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "security-baseline",
+    "term": "Security Baseline",
+    "category": "Security & Compliance",
+    "pronunciation": null,
+    "shortDefinition": "A pre-defined, recommended set of security configuration settings, often published by Microsoft, used as a starting point for hardening a server.",
+    "extendedDefinition": "Security baselines bundle together tested settings covering areas like authentication, auditing, and firewall configuration, typically distributed as Group Policy templates. Organizations apply and then customize them to meet their own compliance and risk requirements rather than configuring every setting from scratch.",
+    "relatedTerms": [
+      "Group Policy Object (GPO)",
+      "Local Security Policy",
+      "Windows Firewall with Advanced Security"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "group-managed-service-account",
+    "term": "Group Managed Service Account (gMSA)",
+    "category": "Security & Compliance",
+    "pronunciation": "G-M-S-A",
+    "shortDefinition": "An Active Directory account type designed for services running on multiple servers, with automatically managed, rotated passwords.",
+    "extendedDefinition": "A gMSA removes the need for administrators to manually manage and synchronize service account passwords across a server farm, since Active Directory handles password changes automatically. It is commonly used for services like IIS application pools or scheduled tasks that need to run under a domain identity.",
+    "relatedTerms": [
+      "Active Directory (AD)",
+      "Application Pool",
+      "Kerberos Authentication"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "powershell",
+    "term": "PowerShell",
+    "category": "PowerShell & Management",
+    "pronunciation": null,
+    "shortDefinition": "A command-line shell and scripting language built on .NET, used to automate administration of Windows Server and many Microsoft products.",
+    "extendedDefinition": "PowerShell works with structured objects rather than plain text, letting administrators pipe the output of one cmdlet directly into another for powerful automation. It is the primary management interface for Server Core installations and underlies many graphical tools in Windows Server.",
+    "relatedTerms": [
+      "Server Core",
+      "PowerShell Desired State Configuration (DSC)",
+      "Windows Management Instrumentation (WMI)"
+    ],
+    "example": "Get-Service | Where-Object Status -eq 'Running'",
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "powershell-dsc",
+    "term": "PowerShell Desired State Configuration (DSC)",
+    "category": "PowerShell & Management",
+    "pronunciation": "D-S-C",
+    "shortDefinition": "A PowerShell-based management platform that declaratively defines and enforces a server's configuration state.",
+    "extendedDefinition": "Instead of scripting the steps to configure a server, administrators describe the desired end state, such as which roles should be installed or which registry values should exist, and DSC ensures the system matches it, correcting drift automatically. It is commonly used for consistent configuration across many servers.",
+    "relatedTerms": [
+      "PowerShell",
+      "Server Manager"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "windows-admin-center",
+    "term": "Windows Admin Center",
+    "category": "PowerShell & Management",
+    "pronunciation": null,
+    "shortDefinition": "A free, browser-based management console for administering Windows Servers, clusters, and Windows client machines.",
+    "extendedDefinition": "Windows Admin Center consolidates tools like Server Manager, Device Manager, and Hyper-V Manager into a single modern web interface, and can be extended with additional tool modules. It is installed as a gateway service and accessed remotely through a browser rather than requiring a locally installed console.",
+    "relatedTerms": [
+      "Server Manager",
+      "PowerShell",
+      "Remote Server Administration Tools (RSAT)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "server-manager",
+    "term": "Server Manager",
+    "category": "PowerShell & Management",
+    "pronunciation": null,
+    "shortDefinition": "The built-in graphical console in Windows Server for installing roles and features and monitoring multiple servers from a single view.",
+    "extendedDefinition": "Server Manager lets administrators add or remove roles like DNS, DHCP, or IIS, and can manage several remote servers as a group rather than one at a time. It has increasingly been complemented by Windows Admin Center as the more modern management surface.",
+    "relatedTerms": [
+      "Windows Admin Center",
+      "Remote Server Administration Tools (RSAT)",
+      "PowerShell"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "task-scheduler",
+    "term": "Task Scheduler",
+    "category": "PowerShell & Management",
+    "pronunciation": null,
+    "shortDefinition": "A Windows component that runs programs or scripts automatically based on a defined schedule or trigger.",
+    "extendedDefinition": "Task Scheduler can launch tasks at specific times, on system events, at logon, or on a recurring interval, making it a common way to automate routine maintenance like backups or cleanup scripts. Tasks can be created through its graphical console or with PowerShell cmdlets.",
+    "relatedTerms": [
+      "PowerShell",
+      "Event Viewer"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "wmi",
+    "term": "Windows Management Instrumentation (WMI)",
+    "category": "PowerShell & Management",
+    "pronunciation": "W-M-I",
+    "shortDefinition": "A management infrastructure in Windows that exposes information about hardware, software, and system configuration through a standardized interface.",
+    "extendedDefinition": "WMI allows scripts and management tools to query and modify system settings, such as disk usage, running processes, or network configuration, in a structured way. PowerShell's CIM cmdlets and many third-party monitoring tools rely on WMI under the hood.",
+    "relatedTerms": [
+      "PowerShell",
+      "Event Viewer"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "rsat",
+    "term": "Remote Server Administration Tools (RSAT)",
+    "category": "PowerShell & Management",
+    "pronunciation": "R-S-A-T",
+    "shortDefinition": "A collection of tools that lets administrators manage Windows Server roles and features remotely from a Windows client machine.",
+    "extendedDefinition": "RSAT includes consoles for managing Active Directory, DNS, DHCP, Group Policy, and other roles without needing to log on to the server directly. It is typically installed as an optional feature on an administrator's workstation.",
+    "relatedTerms": [
+      "Server Manager",
+      "Group Policy Management Console (GPMC)",
+      "Windows Admin Center"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "wsus",
+    "term": "Windows Server Update Services (WSUS)",
+    "category": "PowerShell & Management",
+    "pronunciation": "W-S-U-S",
+    "shortDefinition": "A server role that lets administrators centrally approve, manage, and distribute Microsoft updates to computers on their network.",
+    "extendedDefinition": "WSUS downloads updates from Microsoft once and then distributes them internally, reducing internet bandwidth usage and giving administrators control over which updates are approved and when they are deployed. Compliance and update status can be tracked centrally for all connected clients.",
+    "relatedTerms": [
+      "Server Manager",
+      "Group Policy Object (GPO)",
+      "Cluster-Aware Updating (CAU)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "event-viewer",
+    "term": "Event Viewer",
+    "category": "PowerShell & Management",
+    "pronunciation": null,
+    "shortDefinition": "The built-in Windows console for browsing logs of system, security, and application events.",
+    "extendedDefinition": "Event Viewer organizes events into logs and channels, letting administrators diagnose problems, audit security activity, and set up alerts based on specific event patterns. It is often the first place administrators look when troubleshooting server issues.",
+    "relatedTerms": [
+      "Windows Management Instrumentation (WMI)",
+      "Task Scheduler"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "gpmc",
+    "term": "Group Policy Management Console (GPMC)",
+    "category": "PowerShell & Management",
+    "pronunciation": "G-P-M-C",
+    "shortDefinition": "The primary graphical tool for creating, editing, and linking Group Policy Objects across an Active Directory environment.",
+    "extendedDefinition": "GPMC provides a unified view of all GPOs in a forest, along with reporting and modeling tools to preview how policies will apply before they take effect. It is typically installed as part of RSAT on an administrator's workstation.",
+    "relatedTerms": [
+      "Group Policy Object (GPO)",
+      "Remote Server Administration Tools (RSAT)",
+      "Active Directory (AD)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "fsrm",
+    "term": "File Server Resource Manager (FSRM)",
+    "category": "File & Print Services",
+    "pronunciation": "F-S-R-M",
+    "shortDefinition": "A Windows Server role service that provides tools for managing and reporting on data stored on file servers.",
+    "extendedDefinition": "FSRM includes features such as quota management, file screening, and storage reports, letting administrators control how much space users consume and what types of files can be stored. It is a key tool for keeping file server growth and content under control.",
+    "relatedTerms": [
+      "Disk Quota Management",
+      "File Screening",
+      "File Server role"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "print-server",
+    "term": "Print Server",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server role that centralizes the management and sharing of printers across a network.",
+    "extendedDefinition": "A print server hosts printer drivers and queues so client computers can connect to shared printers without installing drivers locally on every machine. It also gives administrators a central place to monitor print jobs and manage printer permissions.",
+    "relatedTerms": [
+      "Print and Document Services role",
+      "File Server role"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "shadow-copies",
+    "term": "Shadow Copies (Previous Versions)",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A feature that automatically saves point-in-time copies of files on a shared volume, letting users restore earlier versions themselves.",
+    "extendedDefinition": "Built on the Volume Shadow Copy Service, Shadow Copies periodically snapshot a volume so that if a file is accidentally deleted or overwritten, a user can retrieve a previous version through the Previous Versions tab without contacting an administrator. It is not a replacement for full backups since snapshots are typically stored on the same volume.",
+    "relatedTerms": [
+      "Volume Shadow Copy Service (VSS)",
+      "Windows Server Backup",
+      "File Server role"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "work-folders",
+    "term": "Work Folders",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server feature that lets users sync work files between their devices and a central file server, similar to consumer cloud sync tools.",
+    "extendedDefinition": "Work Folders gives organizations a way to provide file synchronization for users' devices, including personal ones, while keeping data centralized on-premises for control and backup. It integrates with existing file server infrastructure rather than requiring a separate cloud service.",
+    "relatedTerms": [
+      "File Server role",
+      "Offline Files (Client-Side Caching)",
+      "Distributed File System (DFS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "branchcache",
+    "term": "BranchCache",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows feature that caches content retrieved from central file and web servers at a branch office, reducing repeated WAN traffic.",
+    "extendedDefinition": "When a user at a branch office requests a file already retrieved by a colleague, BranchCache can serve it from a local cache, either on a dedicated host or distributed among peer clients, instead of pulling it across the WAN link again. It is particularly useful for organizations with slower connections to a central datacenter.",
+    "relatedTerms": [
+      "File Server role",
+      "Distributed File System (DFS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "file-server-role",
+    "term": "File Server role",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server role dedicated to storing and sharing files and folders over the network.",
+    "extendedDefinition": "The File Server role provides the foundation for shared network storage and can be extended with related role services like FSRM, DFS Namespaces, and Data Deduplication. It is one of the most commonly deployed roles in any Windows Server environment.",
+    "relatedTerms": [
+      "File Server Resource Manager (FSRM)",
+      "Distributed File System (DFS)",
+      "Data Deduplication"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "print-and-document-services",
+    "term": "Print and Document Services role",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server role that provides centralized printer management, including the Print Server, LPD, and internet printing components.",
+    "extendedDefinition": "Beyond basic print sharing, this role includes tools for managing printer drivers, monitoring printer health, and deploying printers to client computers via Group Policy. It is the umbrella role under which the Print Server capability lives.",
+    "relatedTerms": [
+      "Print Server",
+      "Group Policy Object (GPO)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "disk-quota-management",
+    "term": "Disk Quota Management",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A feature that limits the amount of storage space a user or folder can consume on a volume or share.",
+    "extendedDefinition": "Quotas can be set at the NTFS volume level or, with more granularity, through File Server Resource Manager, which supports per-folder quotas and notifications as users approach their limit. This helps prevent any single user or group from consuming a disproportionate share of storage.",
+    "relatedTerms": [
+      "File Server Resource Manager (FSRM)",
+      "NTFS"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "file-screening",
+    "term": "File Screening",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A File Server Resource Manager feature that blocks users from saving specific file types to a monitored folder or share.",
+    "extendedDefinition": "Administrators can define screens that reject files by extension, such as media or executable files, on shares where they aren't appropriate, helping enforce storage policy and reduce clutter. Screening can be active, blocking saves outright, or passive, only logging and alerting.",
+    "relatedTerms": [
+      "File Server Resource Manager (FSRM)",
+      "Disk Quota Management"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "offline-files",
+    "term": "Offline Files (Client-Side Caching)",
+    "category": "File & Print Services",
+    "pronunciation": null,
+    "shortDefinition": "A Windows feature that keeps a local copy of network files available on a client device even when it is disconnected from the network.",
+    "extendedDefinition": "Offline Files automatically synchronizes changes between the local cache and the network share once connectivity is restored, letting laptop users continue working on network files while traveling or off the corporate network. It is conceptually related to, but distinct from, the newer Work Folders feature.",
+    "relatedTerms": [
+      "Work Folders",
+      "File Server role"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "iis",
+    "term": "Internet Information Services (IIS)",
+    "category": "Web & Application Services",
+    "pronunciation": "eye-eye-ess",
+    "shortDefinition": "Microsoft's web server role for Windows Server, used to host websites, web applications, and web services.",
+    "extendedDefinition": "IIS handles HTTP and HTTPS requests and can serve static content as well as dynamic applications built on frameworks like ASP.NET. It is managed through the IIS Manager console and organizes sites into application pools for isolation and stability.",
+    "relatedTerms": [
+      "Application Pool",
+      "IIS Manager",
+      "web.config"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "application-pool",
+    "term": "Application Pool",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "An isolated worker process boundary in IIS that separates one web application from others running on the same server.",
+    "extendedDefinition": "Each application pool runs its own worker process, so if one application crashes or is recycled, it does not affect applications in other pools. Administrators can configure separate identities, recycling schedules, and resource limits per pool.",
+    "relatedTerms": [
+      "Internet Information Services (IIS)",
+      "Group Managed Service Account (gMSA)",
+      "Web Garden"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "web-farm",
+    "term": "Web Farm",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "A group of multiple web servers working together to host the same application and share incoming traffic load.",
+    "extendedDefinition": "Web farms improve both performance and availability by distributing requests across several servers, often behind a load balancer or Network Load Balancing cluster. If one server fails, the others continue serving traffic.",
+    "relatedTerms": [
+      "Network Load Balancing (NLB)",
+      "Internet Information Services (IIS)",
+      "Application Request Routing (ARR)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "web-garden",
+    "term": "Web Garden",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "An IIS configuration where a single application pool runs multiple worker processes on the same server.",
+    "extendedDefinition": "Unlike a web farm, which scales an application across multiple servers, a web garden scales an application pool across multiple processes on one machine, which can improve resilience and throughput for CPU-bound or occasionally unresponsive applications. Session state handling becomes important since requests may be served by different processes.",
+    "relatedTerms": [
+      "Application Pool",
+      "Internet Information Services (IIS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "iis-manager",
+    "term": "IIS Manager",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "The graphical management console used to configure and administer Internet Information Services.",
+    "extendedDefinition": "IIS Manager lets administrators create sites and application pools, configure bindings and SSL certificates, and manage modules and settings without editing configuration files directly. It can connect to and manage both local and remote IIS servers.",
+    "relatedTerms": [
+      "Internet Information Services (IIS)",
+      "Application Pool",
+      "web.config"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "virtual-directory",
+    "term": "Virtual Directory",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "An IIS mapping that exposes a folder, potentially located outside a website's physical root, as though it were part of the site's URL structure.",
+    "extendedDefinition": "Virtual directories let administrators publish content from a different physical location under a convenient URL path without moving or duplicating files. They are a common way to organize large or modular web applications within a single site.",
+    "relatedTerms": [
+      "Internet Information Services (IIS)",
+      "IIS Manager"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "web-config",
+    "term": "web.config",
+    "category": "Web & Application Services",
+    "pronunciation": null,
+    "shortDefinition": "An XML configuration file used by IIS and ASP.NET applications to control settings for a website or application.",
+    "extendedDefinition": "A web.config file can define connection strings, authentication settings, custom error pages, and module configuration, and can be overridden at different folder levels within an application. Because it is a plain text file, its settings can also be managed with basic text editors or automated deployment tools.",
+    "relatedTerms": [
+      "Internet Information Services (IIS)",
+      "Application Pool"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "application-request-routing",
+    "term": "Application Request Routing (ARR)",
+    "category": "Web & Application Services",
+    "pronunciation": "A-R-R",
+    "shortDefinition": "An IIS extension that provides reverse proxy and load-balancing functionality for routing web requests to backend servers.",
+    "extendedDefinition": "ARR inspects incoming HTTP requests and forwards them to one of several backend servers based on configurable rules, health checks, and load-balancing algorithms. It is commonly used to front a web farm or to route traffic to different applications based on URL patterns.",
+    "relatedTerms": [
+      "Web Farm",
+      "Internet Information Services (IIS)",
+      "Network Load Balancing (NLB)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "ftp-publishing-service",
+    "term": "FTP Publishing Service",
+    "category": "Web & Application Services",
+    "pronunciation": "F-T-P",
+    "shortDefinition": "An IIS role service that lets a Windows Server host FTP sites for uploading and downloading files.",
+    "extendedDefinition": "The FTP Publishing Service supports secure FTP over SSL/TLS and integrates with IIS's authentication and authorization model, making it possible to publish files or accept uploads from users without deploying a separate FTP product. It is often used for legacy file transfer workflows or automated content publishing.",
+    "relatedTerms": [
+      "Internet Information Services (IIS)",
+      "IIS Manager"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "windows-process-activation-service",
+    "term": "Windows Process Activation Service (WAS)",
+    "category": "Web & Application Services",
+    "pronunciation": "W-A-S",
+    "shortDefinition": "A Windows component that manages application pool configuration and worker process lifecycle for IIS, independent of the HTTP protocol.",
+    "extendedDefinition": "WAS generalizes the process-activation model IIS has long used for HTTP so it can also activate applications using other protocols, such as those hosted with Windows Communication Foundation. It works together with the IIS HTTP listener to start and stop worker processes as needed.",
+    "relatedTerms": [
+      "Application Pool",
+      "Internet Information Services (IIS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "remote-desktop-services",
+    "term": "Remote Desktop Services (RDS)",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": "R-D-S",
+    "shortDefinition": "A Windows Server role that enables users to remotely access full desktops or individual applications hosted on a central server.",
+    "extendedDefinition": "RDS encompasses several role services, including the Session Host, Connection Broker, Web Access, Gateway, and Licensing, that together deliver virtualized desktops and applications to users on various devices. It is the modern evolution of what was originally called Terminal Services.",
+    "relatedTerms": [
+      "Remote Desktop Protocol (RDP)",
+      "RD Connection Broker",
+      "Terminal Services"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "remote-desktop-protocol",
+    "term": "Remote Desktop Protocol (RDP)",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": "R-D-P",
+    "shortDefinition": "The network protocol used to transmit a graphical desktop session between a Windows server or PC and a remote client.",
+    "extendedDefinition": "RDP carries display output and keyboard and mouse input, and can redirect resources like clipboard, printers, and local drives between the client and the remote session. It is the underlying protocol for Remote Desktop Services as well as basic single-user remote administration.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Remote Desktop Gateway",
+      "RemoteApp"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "remote-desktop-gateway",
+    "term": "Remote Desktop Gateway",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "An RDS role service that allows remote users to connect securely to internal desktops and applications over HTTPS without a traditional VPN.",
+    "extendedDefinition": "RD Gateway encapsulates RDP traffic inside an HTTPS connection, letting it pass through firewalls that would normally block direct RDP access while still enforcing authentication and authorization policies. It is a common way to publish remote desktop access to users outside the corporate network.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Remote Desktop Protocol (RDP)",
+      "Network Policy Server (NPS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "remote-desktop-session-host",
+    "term": "Remote Desktop Session Host (RDSH)",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": "R-D-S-H",
+    "shortDefinition": "The RDS role service that hosts shared Windows desktop or application sessions for multiple simultaneously connected users.",
+    "extendedDefinition": "A session host runs a single shared instance of the operating system on which many users each get their own isolated desktop or application session. This session-based model allows organizations to serve many users from comparatively modest hardware, compared to running one VM per user.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "RD Connection Broker",
+      "RemoteApp"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "rd-connection-broker",
+    "term": "RD Connection Broker",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "An RDS role service that manages user connections across a farm of session hosts, ensuring users reconnect to existing sessions.",
+    "extendedDefinition": "The Connection Broker tracks which session host a user's session lives on so that if they disconnect and reconnect, they are routed back to the same session rather than starting a new one. It also handles load balancing of new connections across available session hosts.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Remote Desktop Session Host (RDSH)",
+      "RD Web Access"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "rd-web-access",
+    "term": "RD Web Access",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "An RDS role service that publishes RemoteApp programs and desktops through a web browser interface.",
+    "extendedDefinition": "RD Web Access provides users with a simple webpage listing the remote applications and desktops they are authorized to launch, without requiring them to know server names or manually configure RDP connections. It works together with the Connection Broker and Gateway to deliver the actual sessions.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "RemoteApp",
+      "Remote Desktop Gateway"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "virtual-desktop-infrastructure",
+    "term": "Virtual Desktop Infrastructure (VDI)",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": "V-D-I",
+    "shortDefinition": "An approach to desktop delivery where each user's operating system runs as an individual virtual machine hosted centrally, rather than a shared session.",
+    "extendedDefinition": "Unlike the session-based model of RD Session Host, VDI gives each user a dedicated or pooled VM, typically running a client OS, offering greater isolation and desktop customization at the cost of higher resource overhead. Windows Server's RDS role can broker and manage VDI deployments built on Hyper-V.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Hyper-V",
+      "Virtual Machine (VM)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "rd-licensing",
+    "term": "RD Licensing",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "An RDS role service that manages and tracks the client access licenses required for users or devices to connect to Remote Desktop Session Hosts.",
+    "extendedDefinition": "RD Licensing issues and tracks the client access licenses that Remote Desktop Services requires beyond the base Windows Server license, helping the deployment stay within its licensed capacity. Session hosts must be able to contact a licensing server to continue accepting connections.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Remote Desktop Session Host (RDSH)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "remoteapp",
+    "term": "RemoteApp",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "An RDS feature that lets a single application, rather than a full desktop, be delivered and run from a remote server.",
+    "extendedDefinition": "RemoteApp programs appear to run as if they were installed locally, with their own window and taskbar entry, even though execution actually happens on the session host. This lets organizations centrally manage and update applications while giving users a near-native experience.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "RD Web Access",
+      "Remote Desktop Session Host (RDSH)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "terminal-services",
+    "term": "Terminal Services",
+    "category": "Remote Access & Desktop Services",
+    "pronunciation": null,
+    "shortDefinition": "The original name for what is now called Remote Desktop Services, providing remote desktop and application access from a central server.",
+    "extendedDefinition": "Terminal Services was the branding used prior to Windows Server 2008 R2, after which Microsoft renamed the role to Remote Desktop Services alongside a significant feature expansion. The term is still used informally and appears in some legacy documentation and licensing terminology.",
+    "relatedTerms": [
+      "Remote Desktop Services (RDS)",
+      "Remote Desktop Protocol (RDP)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "failover-clustering",
+    "term": "Failover Clustering",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server feature that groups multiple servers together so that if one fails, another automatically takes over its workloads.",
+    "extendedDefinition": "A failover cluster monitors the health of its member nodes and the services running on them, moving, or failing over, resources like a VM or application to a surviving node if a failure is detected. It is the foundation for many high-availability scenarios, including clustered Hyper-V hosts and database instances.",
+    "relatedTerms": [
+      "Cluster Shared Volumes (CSV)",
+      "Cluster Quorum",
+      "Live Migration"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "cluster-shared-volumes",
+    "term": "Cluster Shared Volumes (CSV)",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": "C-S-V",
+    "shortDefinition": "A feature that lets multiple nodes in a failover cluster simultaneously access the same shared storage volume.",
+    "extendedDefinition": "CSV presents a single consistent file namespace that all cluster nodes can read and write to at once, which is essential for scenarios like Hyper-V clusters where virtual machines need to be able to run on, or move between, any node without unmounting and remounting storage. It removes the traditional restriction of one node owning a shared disk at a time.",
+    "relatedTerms": [
+      "Failover Clustering",
+      "Live Migration",
+      "Storage Spaces Direct (S2D)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "cluster-quorum",
+    "term": "Cluster Quorum",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "The voting mechanism a failover cluster uses to determine whether enough nodes are online and communicating to safely keep running.",
+    "extendedDefinition": "Quorum prevents a split-brain scenario where a cluster partitioned by a network failure has two halves both believing they should keep resources online. By requiring a majority of votes, from nodes, a disk witness, or a file share witness, the cluster ensures only one side continues operating.",
+    "relatedTerms": [
+      "Failover Clustering",
+      "File Share Witness"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "file-share-witness",
+    "term": "File Share Witness",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "A network file share used as a voting member in a failover cluster's quorum configuration, without storing actual cluster data.",
+    "extendedDefinition": "A file share witness gives a cluster an extra vote to help maintain quorum, which is especially useful in clusters that lack shared disk storage or that span multiple sites. It typically resides on a server outside the cluster itself so it remains available regardless of which cluster node fails.",
+    "relatedTerms": [
+      "Cluster Quorum",
+      "Failover Clustering"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "cluster-aware-updating",
+    "term": "Cluster-Aware Updating (CAU)",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": "C-A-U",
+    "shortDefinition": "A feature that automates the process of installing updates on failover cluster nodes without taking the overall cluster offline.",
+    "extendedDefinition": "CAU orchestrates patching by moving workloads off one node at a time, applying updates and rebooting it, then moving on to the next node, ensuring the cluster continues serving its workloads throughout the process. This avoids the need for administrators to manually coordinate maintenance windows across every node.",
+    "relatedTerms": [
+      "Failover Clustering",
+      "Windows Server Update Services (WSUS)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "windows-server-backup",
+    "term": "Windows Server Backup",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "The built-in backup feature in Windows Server for creating and restoring backups of volumes, files, applications, and full system state.",
+    "extendedDefinition": "Windows Server Backup can perform scheduled or one-time backups to local disks, network shares, or other media, and supports both full server and item-level recovery. It relies on the Volume Shadow Copy Service to capture consistent backups while the server remains running.",
+    "relatedTerms": [
+      "Volume Shadow Copy Service (VSS)",
+      "System State Backup"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "storage-replica",
+    "term": "Storage Replica",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "A Windows Server feature that provides block-level, volume-level replication between servers for disaster recovery.",
+    "extendedDefinition": "Storage Replica can synchronously or asynchronously replicate volumes between two servers or clusters, independent of the applications or file systems involved, so an entire site can fail over to a secondary location. It is storage-agnostic, working beneath whatever data is stored on the replicated volume.",
+    "relatedTerms": [
+      "Hyper-V Replica",
+      "Failover Clustering"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "dynamic-memory",
+    "term": "Dynamic Memory (Hyper-V)",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "A Hyper-V feature that automatically adjusts the amount of memory allocated to a running virtual machine based on its actual workload.",
+    "extendedDefinition": "Instead of statically reserving a fixed amount of RAM for each VM, Dynamic Memory lets Hyper-V allocate memory within a configured minimum and maximum range, reclaiming unused memory for other VMs and adding more when demand increases. This improves overall memory utilization on a host running many VMs with varying workloads.",
+    "relatedTerms": [
+      "Hyper-V",
+      "Virtual Machine (VM)"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "volume-activation-services",
+    "term": "Volume Activation Services (KMS)",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": "K-M-S",
+    "shortDefinition": "A Windows Server role that lets organizations activate large numbers of Windows installations against an internal server rather than individually online.",
+    "extendedDefinition": "A Key Management Service host activates client and server operating systems on the local network using volume license keys, with clients periodically renewing their activation by checking in with the KMS host. This avoids the need for every machine to individually contact Microsoft's activation servers over the internet.",
+    "relatedTerms": [
+      "Server Manager"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  },
+  {
+    "id": "system-state-backup",
+    "term": "System State Backup",
+    "category": "High Availability, Clustering & Backup",
+    "pronunciation": null,
+    "shortDefinition": "A backup of the core operating system components, such as the registry, boot files, and Active Directory database on a domain controller, needed to restore a server's configuration.",
+    "extendedDefinition": "System State Backup captures the critical, interdependent components that define a server's identity and configuration rather than all its data, and is commonly used to recover a domain controller or restore a server after a major failure. On a domain controller, it includes the Active Directory database and SYSVOL contents.",
+    "relatedTerms": [
+      "Windows Server Backup",
+      "Active Directory (AD)",
+      "SYSVOL"
+    ],
+    "example": null,
+    "antonym": null,
+    "source": "official"
+  }
+]

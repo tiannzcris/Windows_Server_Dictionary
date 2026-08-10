@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WS Terms — Windows Server Terminology Dictionary</title>
+  <meta name="description" content="A fully offline-capable, searchable dictionary of 100 Windows Server terms. Installable PWA, works with zero network requests." />
+  <meta name="theme-color" content="#0A0F1C" />
+
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Self-hosted fonts: preloaded so the display/body/mono faces are ready
+       before first paint. All three are precached by the service worker. -->
+  <link rel="preload" href="fonts/space-grotesk-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/ibm-plex-sans-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ===================== Top command bar ===================== -->
+  <header class="topbar">
+    <button
+      id="drawer-toggle"
+      class="icon-btn rail-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="category-rail"
+      aria-label="Toggle category menu"
+    ><span data-icon="menu"></span></button>
+
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><span data-icon="layout-grid"></span></span>
+      <div class="brand-text">
+        <h1 class="brand-title">WS Terms</h1>
+        <p class="brand-sub">Windows Server Dictionary</p>
+      </div>
+    </div>
+
+    <search role="search" class="command-search">
+      <div class="command-search-field">
+        <span class="command-search-icon" aria-hidden="true" data-icon="search"></span>
+        <label for="search-input" class="visually-hidden">Search 100+ Windows Server terms</label>
+        <input
+          id="search-input"
+          type="text"
+          class="command-search-input"
+          placeholder="Search terms, abbreviations, definitions…"
+          autocomplete="off"
+          spellcheck="false"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="autocomplete-list"
+          aria-autocomplete="list"
+          aria-activedescendant=""
+        />
+        <kbd class="command-search-hint">/</kbd>
+        <button id="search-clear" class="icon-btn command-search-clear" type="button" aria-label="Clear search" hidden>
+          <span data-icon="x"></span>
+        </button>
+      </div>
+      <ul id="autocomplete-list" class="autocomplete-list" role="listbox" aria-label="Suggestions" hidden></ul>
+    </search>
+
+    <div class="topbar-actions">
+      <button id="add-term-btn" class="btn btn-primary" type="button">
+        <span data-icon="plus"></span>
+        <span>Add Term</span>
+      </button>
+      <div class="view-toggle" role="group" aria-label="Browse mode">
+        <button id="view-grid-btn" class="icon-btn toggle-btn is-active" type="button" aria-pressed="true" aria-label="Grid view">
+          <span data-icon="layout-grid"></span>
+        </button>
+        <button id="view-az-btn" class="icon-btn toggle-btn" type="button" aria-pressed="false" aria-label="A–Z index view">
+          <span data-icon="list"></span>
+        </button>
+      </div>
+      <button id="favorites-toggle-btn" class="icon-btn toggle-btn" type="button" aria-pressed="false" aria-label="Show favorites only">
+        <span data-icon="star"></span>
+      </button>
+      <button id="backup-btn" class="icon-btn" type="button" aria-label="Backup and restore your custom terms">
+        <span data-icon="download"></span>
+      </button>
+      <button id="theme-toggle-btn" class="icon-btn" type="button" aria-label="Switch to light theme">
+        <span data-icon="moon"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- ===================== Category rail / drawer ===================== -->
+    <div id="rail-scrim" class="rail-scrim" hidden></div>
+    <nav id="category-rail" class="rail" aria-label="Categories">
+      <h2 class="rail-heading">Categories</h2>
+      <ul id="category-list" class="rail-list">
+        <li>
+          <button class="rail-chip is-active" type="button" data-category="all" aria-pressed="true">
+            <span class="rail-chip-icon" data-icon="layout-grid"></span>
+            <span class="rail-chip-label">All Categories</span>
+            <span class="rail-chip-count" id="count-all">0</span>
+          </button>
+        </li>
+        <!-- Category chips are rendered here by ui.js -->
+      </ul>
+    </nav>
+
+    <!-- ===================== Main content ===================== -->
+    <main id="main" class="main">
+      <div class="results-toolbar">
+        <h2 id="results-heading" class="results-heading">All Terms</h2>
+        <p id="results-count" class="results-count" aria-live="polite">Loading…</p>
+        <button id="clear-filters-btn" class="link-btn" type="button" hidden>Clear filters</button>
+      </div>
+
+      <section id="grid-view" class="card-grid" aria-label="Term results"></section>
+
+      <section id="az-view" class="az-view" aria-label="Alphabetical index" hidden></section>
+
+      <div id="empty-state" class="empty-state" hidden>
+        <span class="empty-state-icon" data-icon="search"></span>
+        <p>No terms match your search.</p>
+        <p class="empty-state-hint">Try a different spelling, or clear your filters.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===================== Detail panel ===================== -->
+  <dialog id="detail-dialog" class="detail-dialog" aria-labelledby="detail-term-name">
+    <div class="detail-grid-texture" aria-hidden="true"></div>
+    <button class="icon-btn dialog-close" type="button" data-close-dialog aria-label="Close term detail">
+      <span data-icon="x"></span>
+    </button>
+    <div class="detail-content">
+      <div class="detail-header">
+        <span class="detail-category-icon" id="detail-category-icon" aria-hidden="true"></span>
+        <div class="detail-header-text">
+          <p class="detail-category-label" id="detail-category-label"></p>
+          <h2 class="detail-term-name" id="detail-term-name"></h2>
+          <p class="detail-pronunciation" id="detail-pronunciation" hidden></p>
+        </div>
+        <span class="badge badge-custom" id="detail-custom-badge" hidden>Added by you</span>
+        <button
+          id="detail-favorite-btn"
+          class="icon-btn favorite-btn"
+          type="button"
+          aria-pressed="false"
+          aria-label="Add to favorites"
+        ><span data-icon="star"></span></button>
+      </div>
+
+      <p class="detail-short-def" id="detail-short-def"></p>
+      <p class="detail-extended-def" id="detail-extended-def"></p>
+
+      <div class="detail-example" id="detail-example-wrap" hidden>
+        <h3 class="detail-subheading">Example</h3>
+        <pre class="code-block"><code id="detail-example"></code></pre>
+      </div>
+
+      <div class="detail-related" id="detail-related-wrap" hidden>
+        <h3 class="detail-subheading">Related terms</h3>
+        <div class="chip-row" id="detail-related-list"></div>
+      </div>
+
+      <p class="detail-antonym" id="detail-antonym-wrap" hidden>
+        <span class="detail-subheading-inline">Opposite of:</span>
+        <span id="detail-antonym"></span>
+      </p>
+
+      <div class="detail-custom-actions" id="detail-custom-actions" hidden>
+        <button id="detail-edit-btn" class="btn btn-secondary" type="button">
+          <span data-icon="pencil"></span><span>Edit</span>
+        </button>
+        <button id="detail-delete-btn" class="btn btn-danger" type="button">
+          <span data-icon="trash-2"></span><span>Delete</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================== Add / Edit term dialog ===================== -->
+  <dialog id="term-form-dialog" class="form-dialog" aria-labelledby="term-form-heading">
+    <button class="icon-btn dialog-close" type="button" data-close-dialog aria-label="Close form">
+      <span data-icon="x"></span>
+    </button>
+    <form id="term-form" class="term-form" novalidate>
+      <h2 id="term-form-heading">Add a Term</h2>
+      <p class="form-hint">Your own terms are saved only on this device, alongside the official 100.</p>
+
+      <div class="form-field">
+        <label for="field-term">Term <span class="required">*</span></label>
+        <input id="field-term" name="term" type="text" required maxlength="120" autocomplete="off" />
+      </div>
+
+      <div class="form-field">
+        <label for="field-category">Category <span class="required">*</span></label>
+        <select id="field-category" name="category" required>
+          <option value="" disabled selected>Choose a category…</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="field-pronunciation">Pronunciation</label>
+        <input id="field-pronunciation" name="pronunciation" type="text" maxlength="80" autocomplete="off" placeholder="e.g. eye-eye-ess" />
+      </div>
+
+      <div class="form-field">
+        <label for="field-short-def">Short definition</label>
+        <textarea id="field-short-def" name="shortDefinition" rows="2" maxlength="240"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="field-extended-def">Extended definition</label>
+        <textarea id="field-extended-def" name="extendedDefinition" rows="4" maxlength="800"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="field-related">Related terms</label>
+        <input id="field-related" name="relatedTerms" type="text" autocomplete="off" placeholder="Comma-separated, e.g. Hyper-V, Virtual Machine (VM)" />
+      </div>
+
+      <div class="form-field">
+        <label for="field-example">Example</label>
+        <textarea id="field-example" name="example" rows="2" maxlength="300" class="mono-input" placeholder="PowerShell cmdlet, config snippet, or usage sentence"></textarea>
+      </div>
+
+      <p class="form-error" id="term-form-error" role="alert" hidden></p>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" data-close-dialog>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="term-form-submit">Save Term</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ===================== Generic confirm dialog ===================== -->
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-dialog-title">
+    <h2 id="confirm-dialog-title">Delete this term?</h2>
+    <p id="confirm-dialog-message">This can't be undone.</p>
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" data-close-dialog>Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirm-dialog-confirm">Delete</button>
+    </div>
+  </dialog>
+
+  <!-- ===================== Backup & restore dialog ===================== -->
+  <dialog id="backup-dialog" class="backup-dialog" aria-labelledby="backup-dialog-title">
+    <button class="icon-btn dialog-close" type="button" data-close-dialog aria-label="Close backup panel">
+      <span data-icon="x"></span>
+    </button>
+    <h2 id="backup-dialog-title">Backup & Restore</h2>
+    <p class="form-hint">
+      Your custom terms live only in this browser. There's no account and nothing is synced —
+      export a backup before clearing your browser data or switching devices.
+    </p>
+
+    <div class="backup-section">
+      <h3 class="detail-subheading">Export</h3>
+      <p id="backup-export-count">You have 0 custom terms.</p>
+      <button id="backup-export-btn" class="btn btn-secondary" type="button">
+        <span data-icon="download"></span><span>Download backup (.json)</span>
+      </button>
+    </div>
+
+    <div class="backup-section">
+      <h3 class="detail-subheading">Import</h3>
+      <p>Restore terms from a previously exported backup file.</p>
+      <label class="btn btn-secondary file-btn">
+        <span data-icon="upload"></span><span>Choose backup file…</span>
+        <input id="backup-import-input" type="file" accept="application/json" class="visually-hidden" />
+      </label>
+      <p class="form-error" id="backup-import-error" role="alert" hidden></p>
+      <p class="form-success" id="backup-import-success" role="status" hidden></p>
+    </div>
+  </dialog>
+
+  <!-- Polite live region for transient announcements (save/delete/no-results) -->
+  <div id="live-region" class="visually-hidden" aria-live="polite" role="status"></div>
+
+  <!-- ===================== System status strip ===================== -->
+  <footer class="status-strip">
+    <span class="status-item status-connection">
+      <span class="status-dot" id="status-dot" aria-hidden="true"></span>
+      <span id="status-connection-text">Online</span>
+    </span>
+    <span class="status-sep" aria-hidden="true">·</span>
+    <span class="status-item" id="status-cached">0/100 official terms cached</span>
+    <span class="status-item status-custom-count" id="status-custom" hidden></span>
+    <span class="status-sep" aria-hidden="true">·</span>
+    <span class="status-item" id="status-category">Category: All</span>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/sw-register.js"></script>
+</body>
+</html>
